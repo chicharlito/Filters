@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+    <title>cropit</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="../dist/jquery.cropit.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="../src/style.css" type="text/css" />
+  </head>
+  <body>
+	<div class="row">
+		<div class="container">			
+			<div class="image-editor">
+				<div class="col-lg-6">
+				  <input type="file" class="cropit-image-input">
+				  <div class="cropit-preview"></div>
+				  <img src="../filters/noel1.png" class="filter" id="filterId"/>
+				  <div class="image-size-label">
+					Resize image
+				  </div>
+				  <input type="range" class="cropit-image-zoom-input">
+				  <button class="rotate-ccw">Rotate counterclockwise</button>
+				  <button class="rotate-cw">Rotate clockwise</button>
+				  <button class="export">Export</button>
+				</div>
+				<div class="col-lg-6">
+					<select class="form-control">
+					  <option>Fêtes</option>
+					  <option>Evenements</option>
+					  <option>Sports</option>
+					</select>
+					
+					<img src="../filters/noel1.png" alt="Noël 1" id="noel1" class="img-thumbnail thmb">
+					<img src="../filters/noel2.png" alt="Noël 2" id="noel2" class="img-thumbnail thmb">
+					<img src="../filters/noel3.png" alt="Noël 3" id="noel3" class="img-thumbnail thmb">
+					<img src="../filters/noel4.png" alt="Noël 4" id="noel4" class="img-thumbnail thmb">
+				</div>
+			</div>
+		</div>
+	</div>
+    
+
+    <script>
+      $(function() {
+		Lg = $(".cropit-preview").width();
+		$(".cropit-preview").height(Lg);
+        $('.image-editor').cropit({
+          exportZoom: 1.25,
+          imageBackground: true,
+          imageBackgroundBorderWidth: 20,
+          imageState: {
+            src: 'http://lorempixel.com/500/400/',
+          },
+        });
+
+        $('.rotate-cw').click(function() {
+          $('.image-editor').cropit('rotateCW');
+        });
+        $('.rotate-ccw').click(function() {
+          $('.image-editor').cropit('rotateCCW');
+        });
+
+        $('.export').click(function() {
+          var imageData = $('.image-editor').cropit('export');
+		  $.post(
+			"merge.php",
+			{"imageData" : imageData }
+		).done(function(data){
+			//alert(data);
+			//window.open(data);
+		});
+        });
+		
+		$(".thmb").click(function(){
+			src = $(this).attr("id");
+			Nsrc = "../filters/" + src + ".png";
+			$("#filterId").attr("src", Nsrc);
+		});
+		
+      });
+    </script>
+  </body>
+</html>
