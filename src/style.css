@@ -522,7 +522,7 @@ th {
         /* Use relative position to prevent from being covered by image background */
         position: relative;
         z-index: 10;
-        display: block;
+		display:inline !important;
       }
 
       button {
