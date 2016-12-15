@@ -8,9 +8,16 @@
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="src/bootstrap-cstm.css" type="text/css" />
 	<link rel="stylesheet" href="src/style.css" type="text/css" />
+	<link rel="stylesheet" href="src/styles.css" type="text/css" />
 	
   </head>
   <body>
+	<div id="overlay" class="text-center">
+		<div id="loader" class="text-center">
+			<div class='uil-ripple-css' style='transform:scale(0.6);'><div></div><div></div></div>
+			<h3>Création de l'image...</h3>
+		</div>
+	</div>
 	<nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -34,27 +41,31 @@
 </nav>
 	<div class="row">
 		<div class="container">
-			<div class="image-editor">
-				<div class="col-lg-6">
-				  <input type="file" class="cropit-image-input">
+			<div class="image-editor"><div id="overlay-editor" class="text-center"><img src="src/imgs/swipe-up.png" /><h2>Pour commencer, chargez une image de votre ordinateur</h2></div>
+					<div class="col-lg-12 text-center" id="fileInput">
+						<input type="file" id="chooseFile" class="btn btn-lg btn-primary cropit-image-input">
+					</div><hr />
+				<div class="col-lg-6 first">
 				  <div class="cropit-preview"></div>
-				  <img src="filters/noel4.png" class="filter" id="filterId" name="noel4"/>
-				  <div class="image-size-label">
-					Resize image
+				  <img src="filters/noel1.png" class="filter" id="filterId" name="noel4"/>
+				  <div class="resize">
+						<i class="fa fa-search-minus fa-lg" aria-hidden="true" id="minus"></i>
+							<input type="range" class="cropit-image-zoom-input">
+						<i class="fa fa-search-plus fa-lg" aria-hidden="true" id="plus"></i>
 				  </div>
-				  <input type="range" class="cropit-image-zoom-input">
 				  <button class="rotate-ccw btn btn-default"><i class="fa fa-undo" aria-hidden="true"></i></i></button>
 				  <button class="rotate-cw btn btn-default"><i class="fa fa-repeat" aria-hidden="true"></i></button>
-				  <button class="export btn btn-success">Générer !</button>
 				</div>
-				<div class="col-lg-6">
-					<select id="selectFilter" class="form-control">
+				<div class="col-lg-6 text-center second">
+					<h4>Choisissez parmis les filtres originaux</h4>
+					<select id="selectFilter" class="form-control">						
 					  <?php 
 						echo $categories;
 					  ?>
 					</select>
-					
-					<div id="resultFilters"></div>
+					<div id="resultFilters" class="text-center"></div>
+					<button class="export btn btn-annule" id="reset">Annuler</button>
+					<button class="export btn btn-facebook" id="generate">Générer !</button>
 				</div>
 			</div>
 		</div>
@@ -65,12 +76,19 @@
       $(function() {
 		Lg = $(".cropit-preview").width();
 		$(".cropit-preview").height(Lg);
+		LgFirst = $(".first").height();
+		$(".second").height(LgFirst);
+		
+		$("#fileInput").on("click","#chooseFile",function(){
+			$("#overlay-editor").fadeOut();
+		})
+		
         $('.image-editor').cropit({
           exportZoom: 1.25,
           imageBackground: true,
           imageBackgroundBorderWidth: 20,
           imageState: {
-            src: 'http://lorempixel.com/500/400/',
+            src: 'filters/empty.png',
           },
         });
 
@@ -82,13 +100,17 @@
         });
 
         $('.export').click(function() {
-          var imageData = $('.image-editor').cropit('export');
+		  $("#overlay").show();
+          var imageData = $('.image-editor').cropit('export',{type: 'image/jpeg',quality: 1,originalSize: true});
 		  var filter = $("#filterId").attr("name");
 		  url = "index.php";
 		  $.ajax({
 			  type: "POST",
 			  url: url,
-			  data: {"imageData" : imageData, "filter":filter}
+			  data: {"imageData" : imageData, "filter":filter},
+			  success:function(data){
+				  $("#loader").empty().append(data);
+			  }
 			});
         });
 		
@@ -100,6 +122,7 @@
 		});
 		
 		$("#selectFilter").change(function () {
+			$("#resultFilters").empty().append("<img src=\"src/imgs/loader.gif\" style=\"margin-top:50px;\" />");
 			var id = $( "#selectFilter option:selected").attr("id");
 			url = "index.php";
 			  $.ajax({

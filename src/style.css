@@ -474,14 +474,6 @@ th {
     border-radius: 3px;
 }
 
-.filter {
-    width: 93%;
-    position: absolute;
-    top: 28px;
-    pointer-events: none;
-    left: 20px;
-}
-
 .thmb{
 	width:30% !important;
 	max-width:30% !important;

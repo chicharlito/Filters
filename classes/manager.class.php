@@ -14,26 +14,26 @@
 		}
 		
 		public function createImage($background,$filter){
-			define("WIDTH", 500);
-			define("HEIGHT", 500);
-			$filterPath = "filters/".$filter.".png";
+			define("WIDTH", 900);
+			define("HEIGHT", 900);
+			$filterPath = "filters/HD/".$filter.".png";
 			$backgroundPath = htmlentities($background);
 			$imageSize = getimagesize($backgroundPath);
 			$widthBG = $imageSize[0];
 			$heightBG = $imageSize[1];
 
-			$src = imagecreatefrompng($filterPath);
+			$filter = imagecreatefrompng($filterPath);
 
 			$image_p = imagecreatetruecolor(WIDTH, WIDTH);
-			$dest = imagecreatefrompng($backgroundPath);
+			$dest = imagecreatefromjpeg($backgroundPath);
 			imagecopyresampled($image_p, $dest, 0, 0, 0, 0, WIDTH, WIDTH, $widthBG, $heightBG);
 
 			/*$w = imagesx($dest);
 			$h = imagesy($dest);*/
-			imagealphablending($src,true);
+			imagealphablending($filter,true);
 
 			// Copie et fusionne
-			imagecopymerge($image_p, $src, 0, 0, 0, 0, WIDTH, WIDTH, 100);
+			imagecopymerge($image_p, $filter, 0, 0, 0, 0, WIDTH, WIDTH, 100);
 			
 			$auj = date('d-m-Y');
 			$mili = time();
@@ -43,6 +43,8 @@
 
 			// Affichage et libération de la mémoire
 			imagepng($image_p,$imgToSave);
+			echo "<img src=\"".$imgToSave."\" class=\"img-result\" /><hr /><a href=\"index.php\" id=\"restart\" class=\"btn btn-restart\">Recommencer</a>
+					<a href=\"".$imgToSave."\" download id=\"download\" class=\"btn btn-facebook\">Télécharger</a>";
 		}
 		
 		public function getFiltres($categorieId){
@@ -52,12 +54,20 @@
 			$sth->bindParam(":id",$id,PDO::PARAM_INT);
 			$sth->execute();
 			
+			$qr = "SELECT path FROM categories WHERE id=:id";
+			$sth2 = $this->_dbh->prepare($qr);
+			$sth2->bindParam(":id",$id,PDO::PARAM_INT);
+			$sth2->execute();
+			
+			$path = $sth2->fetch();
+			$path = $path[0];
+			
 			$output = $sth->fetchAll(PDO::FETCH_ASSOC);
 			
 			$result = "";
 			
 			foreach($output as $data){
-				$result .= "<img src=\"filters/".$data['path'].".png\" alt=\"".$data['nom']."\" id=\"".$data['nom']."\" class=\"img-thumbnail col-lg-3\">";
+				$result .= "<img src=\"filters/".$path."/".$data['path'].".png\" alt=\"".$data['nom']."\" id=\"".$path."/".$data['path']."\" class=\"img-thumbnail col-lg-3 thmbs\">";
 			}
 			
 			echo $result;
