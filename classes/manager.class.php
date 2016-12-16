@@ -72,7 +72,7 @@
 			$result = "";
 			
 			foreach($output as $data){
-				$result .= "<img src=\"filters/".$path."/".$data['path'].".png\" alt=\"".$data['nom']."\" id=\"".$path."/".$data['path']."\" class=\"img-thumbnail col-lg-3 thmbs\">";
+				$result .= "<img src=\"filters/preview/".$path."/".$data['path'].".png\" alt=\"".$data['nom']."\" id=\"".$path."/".$data['path']."\" class=\"img-thumbnail col-lg-3 thmbs\">";
 			}
 			
 			echo $result;
