@@ -2,7 +2,7 @@
 <html>
   <head>
 	<meta charset="UTF-8">
-    <title>cropit</title>
+    <title>Filtres pour photos de profil Facebook</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script src="dist/jquery.cropit.js"></script>
 	<!-- Latest compiled and minified CSS -->

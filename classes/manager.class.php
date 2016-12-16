@@ -16,7 +16,7 @@
 		public function createImage($background,$filter){
 			define("WIDTH", 900);
 			define("HEIGHT", 900);
-			$filterPath = "filters/HD/".$filter.".png";
+			$filterPath = "filters/HD/".htmlentities($filter).".png";
 			$backgroundPath = htmlentities($background);
 			$imageSize = getimagesize($backgroundPath);
 			$widthBG = $imageSize[0];
@@ -88,8 +88,7 @@
 			
 			foreach($output as $data){
 				$categories .= "<option id=\"".$data['id']."\">".$data['nom']."</option>";
-			}
-			
+			}			
 			return $categories;
 		}
 	}
