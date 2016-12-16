@@ -23,6 +23,7 @@
 			$heightBG = $imageSize[1];
 
 			$filter = imagecreatefrompng($filterPath);
+			imagealphablending($filter,true);
 
 			$image_p = imagecreatetruecolor(WIDTH, WIDTH);
 			$dest = imagecreatefromjpeg($backgroundPath);
@@ -30,10 +31,14 @@
 
 			/*$w = imagesx($dest);
 			$h = imagesy($dest);*/
-			imagealphablending($filter,true);
+			
+			
+			/*$white = imagecolorallocate($image_p, 255, 255, 255); 
+			imagecolortransparent ( $image_p , $white );*/
+			imagealphablending($image_p, true);
 
 			// Copie et fusionne
-			imagecopymerge($image_p, $filter, 0, 0, 0, 0, WIDTH, WIDTH, 100);
+			imagecopy($image_p, $filter, 0, 0, 0, 0, WIDTH, WIDTH);
 			
 			$auj = date('d-m-Y');
 			$mili = time();

@@ -26,6 +26,10 @@
     animation-duration: 4s;
 }
 
+#msgResize{
+	display:none;
+}
+
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes hand {
     0%   {left:0px; top:0px;}
@@ -238,7 +242,7 @@ input[type=range]:focus::-ms-fill-upper {
 .filter {
     width: 93%;
     position: absolute;
-    top: 4px;
+    top: 12px;
     pointer-events: none;
     left: 20px;
 }

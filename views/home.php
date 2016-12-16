@@ -47,7 +47,8 @@
 					</div><hr />
 				<div class="col-lg-6 first">
 				  <div class="cropit-preview"></div>
-				  <img src="filters/noel1.png" class="filter" id="filterId" name="noel4"/>
+				  <img src="" class="filter" id="filterId" name="noel4"/>
+				  <div id="msgResize" class="text-center"><h4>Votre image est trop petite pour être zoomée correctement</h4></div>
 				  <div class="resize">
 						<i class="fa fa-search-minus fa-lg" aria-hidden="true" id="minus"></i>
 							<input type="range" class="cropit-image-zoom-input">
@@ -87,9 +88,15 @@
           exportZoom: 1.25,
           imageBackground: true,
           imageBackgroundBorderWidth: 20,
-          imageState: {
-            src: 'filters/empty.png',
-          },
+		  smallImage:'stretch',
+		  onZoomDisabled:function(){
+			$("#msgResize").show();
+			 $(".resize").css({"opacity":0.2,"cursor":"not-allowed"});
+		  },
+		  onZoomEnabled:function(){
+			  $("#msgResize").hide();
+		  $(".resize").css({"opacity":1,"cursor":"pointer"});
+		  }
         });
 
         $('.rotate-cw').click(function() {
